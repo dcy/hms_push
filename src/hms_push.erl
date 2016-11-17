@@ -5,7 +5,8 @@
          single_send/1, single_send/2, single_send/3, single_send/4,
          ps_single_send/1, ps_single_send/3, ps_single_send/4, ps_single_send/5,
          batch_send/1, batch_send/2, batch_send/3, batch_send/4,
-         ps_batch_send/1, ps_batch_send/3, ps_batch_send/4, ps_batch_send/5
+         ps_batch_send/1, ps_batch_send/3, ps_batch_send/4, ps_batch_send/5,
+         query_msg_result/1, query_msg_result/2, query_msg_result/3, query_msg_result/4
         ]).
 
 -include("hms_push.hrl").
@@ -132,6 +133,27 @@ ps_batch_send(AccessToken, DeviceTokens, Title, Content) ->
 ps_batch_send(AppId, AppSecret, DeviceTokens, Title, Content) ->
     AccessToken = get_access_token(AppId, AppSecret),
     ps_batch_send(AccessToken, DeviceTokens, Title, Content).
+
+
+query_msg_result(RequestId) ->
+    query_msg_result(RequestId, undefined).
+
+query_msg_result(RequestId, DeviceToken) ->
+    ok.
+
+query_msg_result(AppId, AppSecret, RequestId, DeviceToken) ->
+    AccessToken = get_access_token(AppId, AppSecret),
+    query_msg_result(AccessToken, RequestId, DeviceToken).
+
+query_msg_result(AccessToken, RequestId, DeviceToken) ->
+    Payload = case DeviceToken of
+                  undefined -> ?HMS_QUERY_ARGS#{<<"access_token">> => AccessToken,
+                                                <<"request_id">> => RequestId};
+                  _ -> ?HMS_QUERY_ARGS#{<<"access_token">> => AccessToken,
+                                        <<"request_id">> => RequestId,
+                                        <<"token">> => DeviceToken}
+              end,
+    send(Payload).
 
 
 

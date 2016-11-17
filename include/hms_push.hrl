@@ -20,5 +20,8 @@
                              <<"nsp_ts">> => erlang:system_time(seconds),
                              <<"cacheMode">> => 0, <<"msgType">> => -1}).
 
+-define(HMS_QUERY_ARGS, #{<<"nsp_svc">> => <<"openpush.openapi.query_msg_result">>,
+                          <<"nsp_ts">> => erlang:system_time(seconds)}).
+
 
 -endif.
