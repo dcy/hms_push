@@ -122,11 +122,12 @@ ps_batch_send(DeviceTokens, Title, Content) ->
     ps_batch_send(AccessToken, DeviceTokens, Title, Content).
 
 ps_batch_send(AccessToken, DeviceTokens, Title, Content) ->
+    NewList = lists:flatten(io_lib:format("~p", [DeviceTokens])),
     AndroidMsg = jiffy:encode(#{<<"notification_title">> => unicode:characters_to_binary(Title),
                                 <<"notification_content">> => unicode:characters_to_binary(Content),
                                 <<"doings">> => 1}),
     NewPayload = ?HMS_PS_BATCH_ARGS#{<<"access_token">> => AccessToken,
-                                      <<"deviceTokenList">> => DeviceTokens,
+                                      <<"deviceTokenList">> => NewList,
                                       <<"android">> => AndroidMsg},
     send(NewPayload).
 
