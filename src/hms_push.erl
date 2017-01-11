@@ -9,6 +9,8 @@
          query_msg_result/1, query_msg_result/2, query_msg_result/3, query_msg_result/4
         ]).
 
+-export([send/1]).
+
 -include("hms_push.hrl").
 -include_lib("eutil/include/eutil.hrl").
 
