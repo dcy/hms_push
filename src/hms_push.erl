@@ -4,6 +4,9 @@
 -export([get_access_token_info/0, get_access_token_info/2,
          single_send/1, single_send/2, single_send/3, single_send/4,
          ps_single_send/1, ps_single_send/3, ps_single_send/4, ps_single_send/5,
+
+         general_notification/4, general_app_msg/3,
+
          batch_send/1, batch_send/2, batch_send/3, batch_send/4,
          ps_batch_send/1, ps_batch_send/3, ps_batch_send/4, ps_batch_send/5,
          query_msg_result/1, query_msg_result/2, query_msg_result/3, query_msg_result/4
@@ -190,3 +193,9 @@ send(PayloadMaps) ->
             {error, Code}
     end.
 
+
+general_notification(AccessToken, DeviceToken, Title, Content) ->
+    ps_single_send(AccessToken, DeviceToken, Title, Content).
+
+general_app_msg(AccessToken, DeviceToken, Msg) ->
+    single_send(AccessToken, DeviceToken, Msg).
