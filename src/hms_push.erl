@@ -38,7 +38,7 @@ get_access_token_info(AppId, AppSecret) ->
     {ok, _Code, _Headers, ClientRef} = hackney:request(Method, ?HMS_TOKEN_URL, ?URLENCEDED_HEADS,
                                                        Payload, Options),
     {ok, ResultBin} = hackney:body(ClientRef),
-    jiffy:decode(ResultBin, [return_maps]).
+    eutil:json_decode(ResultBin).
 
 get_access_token() ->
     TokenInfo = get_access_token_info(),
@@ -83,9 +83,9 @@ ps_single_send(DeviceToken, Title, Content) ->
     ps_single_send(AccessToken, DeviceToken, Title, Content).
 
 ps_single_send(AccessToken, DeviceToken, Title, Content) ->
-    AndroidMsg = jiffy:encode(#{<<"notification_title">> => unicode:characters_to_binary(Title),
-                                <<"notification_content">> => unicode:characters_to_binary(Content),
-                                <<"doings">> => 1}),
+    AndroidMsg = eutil:json_encode(#{<<"notification_title">> => unicode:characters_to_binary(Title),
+                                     <<"notification_content">> => unicode:characters_to_binary(Content),
+                                     <<"doings">> => 1}),
     NewPayload = ?HMS_PS_SINGLE_ARGS#{<<"access_token">> => AccessToken,
                                       <<"deviceToken">> => DeviceToken,
                                       <<"android">> => AndroidMsg},
@@ -128,12 +128,12 @@ ps_batch_send(DeviceTokens, Title, Content) ->
 
 ps_batch_send(AccessToken, DeviceTokens, Title, Content) ->
     NewList = lists:flatten(io_lib:format("~p", [DeviceTokens])),
-    AndroidMsg = jiffy:encode(#{<<"notification_title">> => unicode:characters_to_binary(Title),
-                                <<"notification_content">> => unicode:characters_to_binary(Content),
-                                <<"doings">> => 1}),
+    AndroidMsg = eutil:json_encode(#{<<"notification_title">> => unicode:characters_to_binary(Title),
+                                     <<"notification_content">> => unicode:characters_to_binary(Content),
+                                     <<"doings">> => 1}),
     NewPayload = ?HMS_PS_BATCH_ARGS#{<<"access_token">> => AccessToken,
-                                      <<"deviceTokenList">> => NewList,
-                                      <<"android">> => AndroidMsg},
+                                     <<"deviceTokenList">> => NewList,
+                                     <<"android">> => AndroidMsg},
     send(NewPayload).
 
 ps_batch_send(AppId, AppSecret, DeviceTokens, Title, Content) ->
@@ -171,13 +171,13 @@ do_send(PayloadMaps) ->
     {ok, _Code, _Headers, ClientRef} = hackney:request(Method, ?HMS_API_URL, ?URLENCEDED_HEADS,
                                                        Payload, Options),
     {ok, ResultBin} = hackney:body(ClientRef),
-    jiffy:decode(ResultBin, [return_maps]).
+    eutil:json_decode(ResultBin).
 
 send(PayloadMaps) ->
     ResultOri = do_send(PayloadMaps),
     Result = case erlang:is_map(ResultOri) of
                  true -> ResultOri;
-                 false -> jiffy:decode(ResultOri, [return_maps])
+                 false -> eutil:json_decode(ResultOri)
              end,
     Code = case maps:get(<<"resultcode">>, Result, undefined) of
                undefined -> maps:get(<<"result_code">>, Result);

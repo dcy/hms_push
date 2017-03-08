@@ -7,8 +7,6 @@
    [kernel,
     stdlib,
     hackney,
-    jiffy,
-    lager,
     eutil
    ]},
   {env,[]},
