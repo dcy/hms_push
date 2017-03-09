@@ -34,7 +34,7 @@ get_access_token_info(AppId, AppSecret) ->
              {client_secret, AppSecret}],
     Method = post,
     Payload = eutil:urlencode(Datas),
-    Options = [{pool, default}],
+    Options = [{pool, hms}],
     {ok, _Code, _Headers, ClientRef} = hackney:request(Method, ?HMS_TOKEN_URL, ?URLENCEDED_HEADS,
                                                        Payload, Options),
     {ok, ResultBin} = hackney:body(ClientRef),
@@ -167,7 +167,7 @@ query_msg_result(AccessToken, RequestId, DeviceToken) ->
 do_send(PayloadMaps) ->
     Method = post,
     Payload = eutil:urlencode(PayloadMaps),
-    Options = [{pool, default}],
+    Options = [{pool, hms}],
     {ok, _Code, _Headers, ClientRef} = hackney:request(Method, ?HMS_API_URL, ?URLENCEDED_HEADS,
                                                        Payload, Options),
     {ok, ResultBin} = hackney:body(ClientRef),
