@@ -64,7 +64,7 @@ single_send(DeviceToken, Message) ->
 
 single_send(AccessToken, DeviceToken, Message) ->
     Payload = ?HMS_SINGLE_ARGS#{<<"access_token">> => AccessToken,
-                                <<"deviceToken">> => list_to_binary(DeviceToken),
+                                <<"deviceToken">> => eutil:to_binary(DeviceToken),
                                 <<"message">> => Message},
     send(Payload).
 
