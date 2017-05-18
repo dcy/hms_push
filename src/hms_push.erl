@@ -185,12 +185,12 @@ send(PayloadMaps) ->
            end,
     case Code of
         ?SUCCESS_0 ->
-            {ok, Code};
+            {ok, Result};
         ?ACCESS_TOKEN_EXPIRE ->
-            {access_token_expire, Code};
+            {access_token_expire, Result};
         _ ->
             ?ERROR_MSG("huawei_push error, PayloadMaps: ~p, Result: ~p", [PayloadMaps, Result]),
-            {error, Code}
+            {error, Result}
     end.
 
 
