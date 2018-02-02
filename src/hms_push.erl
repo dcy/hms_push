@@ -189,7 +189,7 @@ send(PayloadMaps) ->
         ?ACCESS_TOKEN_EXPIRE ->
             {access_token_expire, Result};
         _ ->
-            ?ERROR_MSG("huawei_push error, PayloadMaps: ~p, Result: ~p", [PayloadMaps, Result]),
+            error_logger:error_msg("huawei_push error, PayloadMaps: ~p, Result: ~p", [PayloadMaps, Result]),
             {error, Result}
     end.
 
